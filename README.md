@@ -1,35 +1,67 @@
-# ShopSmart Online Ltd — Task 2 SQL appendix
+# ShopSmart Online Ltd — Task 2 SQL Appendix
 
-This repository contains SQL for an academic exercise using fictional, synthetic e-commerce data. No real customer information is included.
+This repository contains the PostgreSQL SQL scripts developed for Task 2 of the Data Design Management assessment, using fictional, synthetic e-commerce data. No real customer information is included.
 
 ## Files
 
-- `ShopSmart_Task2_Complete.sql` — original nine-table SQL setup and 780-row synthetic seed, integrity checks, transaction reconciliation, five business queries and two materialized-view transformations. The original statements are preserved; only the introductory header was adjusted to describe clean replay.
-- `ShopSmart_Task2_Verification_Checks.sql` — additional read-only post-run verification queries (not part of the original presentation).
+- **ShopSmart_Task2_Complete.sql** — Complete SQL script containing nine table definitions, synthetic-data insertion statements, database integrity constraints, five business-analysis queries, two materialized-view transformations and validation queries.
+- **ShopSmart_Task2_Verification_Checks.sql** — Additional SQL queries for checking database records, relationships, transactions and analytical outputs.
 
 ## Requirements
 
-- PostgreSQL 18 (the version used for coursework); pgAdmin 4 or a PostgreSQL SQL client.
+- PostgreSQL 18
+- pgAdmin 4 or another PostgreSQL-compatible SQL client
 
-## How to run (pgAdmin 4)
+## How to Run (pgAdmin 4)
 
-1. Create a **brand-new empty** database, e.g. `shopsmart_task2_github_test`. Do not use a populated database.
-2. Right-click that new database > Query Tool. Run `SELECT current_database();` and confirm the correct name.
-3. Open `ShopSmart_Task2_Complete.sql` through the Query Tool folder icon. Make sure no SQL is selected, then press **F5** once to execute the whole file. Avoid rerunning on the same database.
-4. Check the **Messages** tab for errors. A successful query run alone is not proof of matching results.
-5. In a separate Query Tool tab connected to the same database, open `ShopSmart_Task2_Verification_Checks.sql` and run each verification query separately, or execute the file and review each result.
-6. Inspect `Schemas > public > Tables` for nine tables and `Schemas > public > Materialized Views` for `shopsmart_monthly_sales` and `shopsmart_inventory_category_summary`.
+1. Create a new, empty PostgreSQL database, for example `shopsmart_task2_github_test`.
+2. Right-click the new database and select **Query Tool**.
+3. Execute `SELECT current_database();` to confirm that the correct database is selected.
+4. Open `ShopSmart_Task2_Complete.sql` in the Query Tool.
+5. Execute the complete SQL script using **F5**.
+6. Check the **Messages** and **Data Output** panels for execution results.
+7. Open `ShopSmart_Task2_Verification_Checks.sql` in a separate Query Tool tab and execute the verification queries.
+8. Refresh **Schemas → public → Tables** and **Materialized Views** to inspect the database objects.
 
-## Expected base-data record counts (fresh database)
+The complete SQL script should be executed in a fresh database to avoid conflicts with existing records or materialized views.
 
-`customers` 30; `categories` 30; `suppliers` 30; `employees` 30; `products` 60; `inventory` 60; `orders` 120; `order_items` 300; `payments` 120; **total 780**.
+## Expected Database Records
 
-Payment reconciliation is expected to check 120 orders with zero orders missing lines, missing payments or mismatched amounts.
+| Table | Records |
+|---|---:|
+| Customers | 30 |
+| Categories | 30 |
+| Suppliers | 30 |
+| Employees | 30 |
+| Products | 60 |
+| Inventory | 60 |
+| Orders | 120 |
+| Order Items | 300 |
+| Payments | 120 |
+| **Total** | **780** |
 
-## Verification note / known discrepancy to check
+## SQL Verification Results
 
-The original inventory seed uses a formula to set stock quantities. A static calculation of those exact rules indicates **24** active products with stock at or below the reorder level. Some earlier slide-based descriptions state **17**. We have **not** executed this package on a live PostgreSQL server here, so the PostgreSQL output is authoritative. If the clean run returns 24, reconcile Slides 15–18 before claiming a match. Do not alter the historical source silently.
+The following results were verified using PostgreSQL 18 and pgAdmin 4:
+
+- 120 orders with no missing order items or payments.
+- Zero payment amount mismatches.
+- 60 active products with corresponding inventory records.
+- 30 suppliers, each assigned two products.
+- 24 products below their reorder thresholds, representing 40% of active products.
+- Zero products completely out of stock.
+- The inventory category materialized view reports 24 reorder alerts, matching the original inventory table.
+
+The inventory and supplier results agree with the figures presented in Task 2, Slides 15 and 16.
+
+## Testing and Reproducibility
+
+The complete SQL script was successfully executed in a fresh PostgreSQL 18 database using pgAdmin 4 without reported execution errors.
+
+The repository provides the SQL source code and verification queries so that the assessment marker can reproduce the database structure, synthetic records, analytical queries and transformations independently.
 
 ## Limitations
 
-This package has been checked for file composition and source preservation, not yet certified by a full live PostgreSQL clean-run in this environment. Queries using materialized views create objects and require database write privileges. This script does not create the database itself.
+The database contains fictional synthetic records created for academic demonstration. The results illustrate database design, SQL analysis and data transformation techniques and should not be interpreted as actual business performance.
+
+Materialized views store aggregated results and require refreshing if the underlying data is subsequently changed.
